@@ -1,6 +1,8 @@
 import 'package:art_guide_flutter/components/bottom_nav_menu.dart';
+import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 
 class ListPage extends StatefulWidget {
@@ -49,6 +51,10 @@ class ListPageSate extends State<ListPage>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
+    ));
+
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: Scaffold(
@@ -59,7 +65,8 @@ class ListPageSate extends State<ListPage>
 
         body: new CustomScrollView(slivers: <Widget>[
           const SliverAppBar(
-            title: const Text('Культурный гид'),
+            title: Align(child: Text('Культурный гид', style: TextStyle(color: Colors.black)), alignment: Alignment.centerRight,),
+            backgroundColor: Colors.transparent,
             floating: true,
           ),
           SliverGroupBuilder(
@@ -101,30 +108,35 @@ class ListPageSate extends State<ListPage>
 List buildTextViews(int count, BuildContext context) {
   List<Widget> strings = List();
   for (int i = 0; i < count; i++) {
-    var card = Card(
+    var card = Container(
+      margin: EdgeInsets.only(bottom: 20, right: 20),
+      height: 120,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+          borderRadius: new BorderRadius.only(
+              bottomRight: const Radius.circular(40.0),
+              topRight: const Radius.circular(40.0))),
+
       child: InkWell(
         onTap: () {},
         child: Row(
           children: <Widget>[
             // ICON
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5.0),
-                  bottomLeft: Radius.circular(5.0)),
-              child: Image.asset(
+            Image.asset(
                 'images/memorial_kirovu_small.jpg',
                 width: MediaQuery.of(context).size.width * 0.3,
-                height: 120,
                 fit: BoxFit.fill,
               ),
-            ),
 
+            // TEXT
             Column(
               children: <Widget>[
                 // TITLE
                 Text('Title', style: Theme.of(context).textTheme.headline),
                 // DESCRIPTION
-                Text('Description', style: Theme.of(context).textTheme.body1),
+                Text('Description', maxLines: 3, style: Theme.of(context).textTheme.body2),
+
               ],
             ),
           ],
