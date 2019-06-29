@@ -1,6 +1,7 @@
 import 'package:art_guide_flutter/components/bottom_nav_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key key}) : super(key: key);
@@ -61,9 +62,20 @@ class ListPageSate extends State<ListPage>
             title: const Text('Культурный гид'),
             floating: true,
           ),
-          new SliverList(
-              delegate:
-                  new SliverChildListDelegate(buildTextViews(50, context)))
+          SliverGroupBuilder(
+              decoration: ShapeDecoration(
+                image: DecorationImage(
+                    image: AssetImage('images/main_map_graphic.png'),
+                    fit: BoxFit.fill
+                ),
+                shape: Border.all(
+                  color: Colors.grey,
+                  style: BorderStyle.none,
+                  width: 1,
+                ),
+              ),
+              child: SliverList(
+                  delegate: SliverChildListDelegate(buildTextViews(50, context))))
         ]),
         bottomNavigationBar: ClipRect(
           child: SizeTransition(
@@ -90,36 +102,35 @@ List buildTextViews(int count, BuildContext context) {
   List<Widget> strings = List();
   for (int i = 0; i < count; i++) {
     var card = Card(
-        child: InkWell(
-          onTap: () {},
-          child: Row(
-            children: <Widget>[
-              // ICON
-              ClipRRect(
-                borderRadius: BorderRadius.only( topLeft: Radius.circular(5.0), bottomLeft: Radius.circular(5.0)),
-                child: Image.asset(
-                  'images/memorial_kirovu_small.jpg',
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: 120,
-                  fit: BoxFit.fill,
-                ),
+      child: InkWell(
+        onTap: () {},
+        child: Row(
+          children: <Widget>[
+            // ICON
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5.0),
+                  bottomLeft: Radius.circular(5.0)),
+              child: Image.asset(
+                'images/memorial_kirovu_small.jpg',
+                width: MediaQuery.of(context).size.width * 0.3,
+                height: 120,
+                fit: BoxFit.fill,
               ),
+            ),
 
-
-              Column(
-                children: <Widget>[
-                  // TITLE
-                  Text('Title', style: Theme.of(context).textTheme.headline),
-                  // DESCRIPTION
-                  Text('Description', style: Theme.of(context).textTheme.body1),
-                ],
-              ),
-
-
-            ],
-          ),
+            Column(
+              children: <Widget>[
+                // TITLE
+                Text('Title', style: Theme.of(context).textTheme.headline),
+                // DESCRIPTION
+                Text('Description', style: Theme.of(context).textTheme.body1),
+              ],
+            ),
+          ],
         ),
-      );
+      ),
+    );
 
     /*SizedBox(
       height: 128,
