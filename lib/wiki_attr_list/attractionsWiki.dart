@@ -52,7 +52,8 @@ class ListPageSate extends State<ListPage>
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
+      statusBarColor:
+          AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
     return NotificationListener<ScrollNotification>(
@@ -65,7 +66,11 @@ class ListPageSate extends State<ListPage>
 
         body: new CustomScrollView(slivers: <Widget>[
           const SliverAppBar(
-            title: Align(child: Text('Культурный гид', style: TextStyle(color: Colors.black)), alignment: Alignment.centerRight,),
+            title: Align(
+              child:
+                  Text('Культурный гид', style: TextStyle(color: Colors.black)),
+              alignment: Alignment.centerRight,
+            ),
             backgroundColor: Colors.transparent,
             floating: true,
           ),
@@ -73,8 +78,7 @@ class ListPageSate extends State<ListPage>
               decoration: ShapeDecoration(
                 image: DecorationImage(
                     image: AssetImage('images/main_map_graphic.png'),
-                    fit: BoxFit.fill
-                ),
+                    fit: BoxFit.fill),
                 shape: Border.all(
                   color: Colors.grey,
                   style: BorderStyle.none,
@@ -82,7 +86,8 @@ class ListPageSate extends State<ListPage>
                 ),
               ),
               child: SliverList(
-                  delegate: SliverChildListDelegate(buildTextViews(50, context))))
+                  delegate:
+                      SliverChildListDelegate(buildTextViews(50, context))))
         ]),
         bottomNavigationBar: ClipRect(
           child: SizeTransition(
@@ -106,6 +111,8 @@ class ListPageSate extends State<ListPage>
 }
 
 List buildTextViews(int count, BuildContext context) {
+  var longText = 'Description Description Description Description Description Description Description Description Description Description Description DescriptionDescription';
+
   List<Widget> strings = List();
   for (int i = 0; i < count; i++) {
     var card = Container(
@@ -117,55 +124,67 @@ List buildTextViews(int count, BuildContext context) {
           borderRadius: new BorderRadius.only(
               bottomRight: const Radius.circular(40.0),
               topRight: const Radius.circular(40.0))),
-
       child: InkWell(
         onTap: () {},
         child: Row(
           children: <Widget>[
             // ICON
             Image.asset(
-                'images/memorial_kirovu_small.jpg',
-                width: MediaQuery.of(context).size.width * 0.3,
-                fit: BoxFit.fill,
-              ),
+              'images/memorial_kirovu_small.jpg',
+              width: MediaQuery.of(context).size.width * 0.3,
+              fit: BoxFit.fill,
+            ),
 
             // TEXT
             Column(
               children: <Widget>[
                 // TITLE
-                Text('Title', style: Theme.of(context).textTheme.headline),
+                SizedBox(
+                  height: 40.0,
+                  width: 220.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Title Title Title Title Title Title Title Title Title Title Title Title Title',
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.body2,
+                    ),
+                  ),
+                ),
                 // DESCRIPTION
-                Text('Description', maxLines: 3, style: Theme.of(context).textTheme.body2),
-
+                SizedBox(
+                    height: 30.0,
+                    width: 220.0,
+                    child: Text(
+                        longText,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.body1)),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: FlatButton(
+                        shape: StadiumBorder(),
+                        color: AppColors.colorGreen,
+                        onPressed: () {},
+                        child:
+                            Text('Show more', style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('на карте', style: TextStyle(color: AppColors.colorGreen, fontWeight: FontWeight.bold),),
+                    ),
+                    IconButton(onPressed: () {}, icon: Container(child: Image.asset('images/build_road_red.png'),),
+                    )
+                  ],
+                )
               ],
             ),
           ],
         ),
       ),
     );
-
-    /*SizedBox(
-      height: 128,
-      child: Card(
-        child: new Material(
-          color: Colors.transparent,
-          child: new InkWell(
-
-            child:  Row(
-              children: <Widget>[
-                // icon
-                Image.asset('images/memorial_kirovu_small.jpg', width: MediaQuery.of(context).size.width * 0.3,),
-                // title, description
-                Column(children: <Widget>[
-                  Text('Item $i', style: Theme.of(context).textTheme.headline),
-                ],),
-
-              ],
-            ),
-          ),
-        ),
-    ));*/
-
     strings.add(card);
   }
   return strings;
@@ -174,24 +193,3 @@ List buildTextViews(int count, BuildContext context) {
 void main() {
   runApp(MaterialApp(home: ListPage()));
 }
-
-/*
-SizedBox.expand(
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: 128,
-                child: Card(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                      child: Text('Item $index',
-                          style: Theme.of(context).primaryTextTheme.display1),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        )
-* */
