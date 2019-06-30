@@ -1,10 +1,12 @@
-import 'package:art_guide_flutter/components/bottom_nav_bar.dart';
-import 'package:art_guide_flutter/ui/colors.dart';
-import './wiki_list_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
+
+import '../ui/colors.dart';
+import '../components/app_bar.dart';
+import '../components/bottom_nav_bar.dart';
+import './wiki_list_builder.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key key}) : super(key: key);
@@ -16,7 +18,6 @@ class ListPage extends StatefulWidget {
 }
 
 class ListPageSate extends State<ListPage> {
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -24,18 +25,15 @@ class ListPageSate extends State<ListPage> {
           AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
-    BottomNavBar  bottomNavBar = BottomNavBar();
+    BottomNavBar bottomNavBar = BottomNavBar();
 
     return NotificationListener<ScrollNotification>(
-      onNotification: (notificaton) => bottomNavBar.navBarState.handleScrollNotification(notificaton),
+      onNotification: (notificaton) =>
+          bottomNavBar.navBarState.handleScrollNotification(notificaton),
       child: Scaffold(
         body: new CustomScrollView(slivers: <Widget>[
           const SliverAppBar(
-            title: Align(
-              child:
-                  Text('Культурный гид', style: TextStyle(color: Colors.black)),
-              alignment: Alignment.centerRight,
-            ),
+            title: MyAppBar(),
             backgroundColor: Colors.transparent,
             floating: true,
           ),
@@ -51,15 +49,14 @@ class ListPageSate extends State<ListPage> {
                 ),
               ),
               child: SliverList(
-                  delegate:
-                      SliverChildListDelegate(WikiListBuilder.buildTextViews(50, context))))
+                  delegate: SliverChildListDelegate(
+                      WikiListBuilder.buildTextViews(50, context))))
         ]),
         bottomNavigationBar: bottomNavBar,
       ),
     );
   }
 }
-
 
 void main() {
   runApp(MaterialApp(home: ListPage()));
