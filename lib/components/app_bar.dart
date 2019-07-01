@@ -8,9 +8,9 @@ class MyAppBar extends StatelessWidget {
     return Row(
       children: <Widget>[
         SizedBox(width: 100),
-        Image.asset('images/small_sign.png', height: 40),
+        Image.asset('images/small_sign.png', height: 35),
         SizedBox(width: 20),
-        Text('Культурный гид', style: TextStyle(color: Colors.black))
+        Text('Культурный гид', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
       ],
     );
   }

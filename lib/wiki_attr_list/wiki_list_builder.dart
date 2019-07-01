@@ -10,7 +10,7 @@ class WikiListBuilder {
     for (int i = 0; i < count; i++) {
       var card = Container(
         margin: EdgeInsets.only(bottom: 20, right: 20),
-        height: 120,
+        height: 150,
         foregroundDecoration: BoxDecoration(
             border: Border.all(color: Colors.black),
             borderRadius: new BorderRadius.only(
@@ -36,15 +36,18 @@ class WikiListBuilder {
                 Column(
                   children: <Widget>[
                     // TITLE
-                    SizedBox(
-                      height: 40.0,
-                      width: 220.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          'Title Title Title Title Title Title Title Title Title Title Title Title Title',
-                          maxLines: 2,
-                          style: Theme.of(context).textTheme.body2,
+                    Container(
+                      margin: EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 40.0,
+                        width: 200.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            'Title Title Title Title Title Title Title Title Title Title Title Title Title',
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.body2,
+                          ),
                         ),
                       ),
                     ),
@@ -55,34 +58,37 @@ class WikiListBuilder {
                         child: Text(longText,
                             maxLines: 2,
                             style: Theme.of(context).textTheme.body1)),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: FlatButton(
-                            shape: StadiumBorder(),
-                            color: AppColors.colorGreen,
+                    Container(
+                      margin: EdgeInsets.only(top: 12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: FlatButton(
+                              shape: StadiumBorder(),
+                              color: AppColors.colorGreen,
+                              onPressed: () {},
+                              child: Text('Show more',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'на карте',
+                              style: TextStyle(
+                                  color: AppColors.colorGreen,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          IconButton(
                             onPressed: () {},
-                            child: Text('Show more',
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'на карте',
-                            style: TextStyle(
-                                color: AppColors.colorGreen,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Container(
-                            child: Image.asset('images/build_road_red.png'),
-                          ),
-                        )
-                      ],
+                            icon: Container(
+                              child: Image.asset('images/build_road_red.png'),
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
