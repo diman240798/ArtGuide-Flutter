@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
+import 'package:provider/provider.dart';
 
 import '../ui/colors.dart';
 import '../components/app_bar.dart';
@@ -24,6 +25,8 @@ class ListPageSate extends State<ListPage> {
       statusBarColor:
           AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
+
+    final listBloc = Provider.of<AttractionListBloc>(context);
 
     BottomNavBar bottomNavBar = BottomNavBar();
 
@@ -50,7 +53,7 @@ class ListPageSate extends State<ListPage> {
               ),
               child: SliverList(
                   delegate: SliverChildListDelegate(
-                      WikiListBuilder.buildTextViews(50, context))))
+                      WikiListBuilder.buildTextViews(listBloc.getAttractions(), context))))
         ]),
         bottomNavigationBar: bottomNavBar,
       ),
@@ -58,6 +61,35 @@ class ListPageSate extends State<ListPage> {
   }
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ChangeNotifierProvider<AttractionListBloc>(
+        builder: (_) => AttractionListBloc([1,2,3,4]),
+        child: ListPage(),
+      ),
+    );
+  }
+}
+
 void main() {
-  runApp(MaterialApp(home: ListPage()));
+  runApp(MyApp());
+}
+
+class AttractionListBloc with ChangeNotifier {
+  List attractions;
+
+  AttractionListBloc(this.attractions);
+
+  void setAttractions(List attractions) {
+    this.attractions = attractions;
+    notifyListeners();
+  }
+
+  List getAttractions() => attractions;
 }

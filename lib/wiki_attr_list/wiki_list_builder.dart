@@ -2,13 +2,13 @@ import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
 
 class WikiListBuilder {
-  static List buildTextViews(int count, BuildContext context) {
+  static List buildTextViews(List attractions, BuildContext context) {
     var longText =
         'Description Description Description Description Description Description Description Description Description Description Description DescriptionDescription';
 
     List<Widget> strings = List();
-    for (int i = 0; i < count; i++) {
-      var card = Container(
+    attractions.forEach((attraction) {
+    var card = Container(
         margin: EdgeInsets.only(bottom: 20, right: 20),
         height: 150,
         foregroundDecoration: BoxDecoration(
@@ -98,7 +98,7 @@ class WikiListBuilder {
         ),
       );
       strings.add(card);
-    }
+    });
     return strings;
   }
 }

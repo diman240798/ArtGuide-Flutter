@@ -18,7 +18,7 @@ environment:
 
 dependencies:
   flutter_group_sliver: ^0.0.2
-
+  provider: ^3.0.0+1
   flutter:
     sdk: flutter
 
