@@ -35,7 +35,7 @@ class ListPageSate extends State<ListPage> {
           bottomNavBar.navBarState.handleScrollNotification(notificaton),
       child: Scaffold(
         body: new CustomScrollView(slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             title: MyAppBar(),
             backgroundColor: Colors.transparent,
             floating: true,
