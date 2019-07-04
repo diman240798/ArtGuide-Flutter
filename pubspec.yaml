@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter_group_sliver: ^0.0.2
   provider: ^3.0.0+1
+  flutter_map: 0.5.5+2
+  flutter_map_marker_cluster:
   flutter:
     sdk: flutter
 
