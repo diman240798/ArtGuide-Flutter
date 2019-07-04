@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Marker> markers;
   int pointIndex;
-  List points = [
+  List<LatLng> points = [
     LatLng(51.5, -0.09),
     LatLng(49.8566, 3.3522),
   ];
@@ -35,48 +35,55 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     pointIndex = 0;
+    var markerBuilder = (ctx) => Container(
+      child: IconButton(
+          icon: Image.asset('images/map_marker_memorial.png'),
+          onPressed: () => Scaffold.of(ctx).showSnackBar(
+              new SnackBar(
+                  content: new Text("Sending Message"), duration: Duration(seconds: 1),))),
+    );
     markers = [
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: points[pointIndex],
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: LatLng(53.3498, -6.2603),
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: LatLng(53.3488, -6.2613),
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: LatLng(53.3488, -6.2613),
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: LatLng(48.8566, 2.3522),
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
       Marker(
         anchorPos: AnchorPos.align(AnchorAlign.center),
         height: 30,
         width: 30,
         point: LatLng(49.8566, 3.3522),
-        builder: (ctx) => Icon(Icons.pin_drop),
+        builder: markerBuilder,
       ),
     ];
 
@@ -85,6 +92,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var mapController = MapController();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.refresh),
@@ -110,6 +119,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       body: FlutterMap(
+        mapController: mapController,
         options: new MapOptions(
           center: points[0],
           zoom: 5,
@@ -121,6 +131,14 @@ class _HomePageState extends State<HomePage> {
           TileLayerOptions(
             urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: ['a', 'b', 'c'],
+          ),
+          PolylineLayerOptions(
+            polylines: [
+              Polyline(
+                  points: points,
+                  strokeWidth: 4.0,
+                  color: Colors.purple),
+            ],
           ),
           MarkerClusterLayerOptions(
             maxClusterRadius: 120,
