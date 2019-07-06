@@ -5,8 +5,8 @@ import 'package:art_guide_flutter/wiki_attr_list/attractionsWiki.dart';
 
 class PlaceRepository {
   List<Place> places;
-  PlaceRepository(AttractionListBloc list) {
-    places = CsvReader.getData(list);
+  PlaceRepository(AttractionListBloc bloc) {
+    places = CsvReader.getData(bloc, this);
   }
 
   List<Place> getPlacesByType(AttractionType type) {

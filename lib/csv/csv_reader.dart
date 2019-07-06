@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:art_guide_flutter/model/attraction.dart';
+import 'package:art_guide_flutter/repo/place_repo.dart';
 import 'package:art_guide_flutter/util/place_util.dart';
 import 'package:art_guide_flutter/wiki_attr_list/attractionsWiki.dart';
 import 'package:synchronized/synchronized.dart';
@@ -10,11 +11,12 @@ import 'file_getter.dart';
 class CsvReader {
   static List<Place> data = List();
 
-  static List<Place> getData(AttractionListBloc list) {
+  static List<Place> getData(AttractionListBloc list, PlaceRepository placeRepository) {
     if (data.isEmpty) {
       var lock = new Lock();
       lock.synchronized(() async {
         data = await readData();
+        placeRepository.places = data;
         list.setAttractions(data);
       });
     }

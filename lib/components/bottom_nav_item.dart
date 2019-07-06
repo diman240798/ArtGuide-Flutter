@@ -9,23 +9,26 @@ class BottomMenuItem extends StatelessWidget {
 
   final AttractionType attractionType;
 
-  const BottomMenuItem(this.attractionType, {Key key, this.iconPath, this.needDevider})
+  const BottomMenuItem(this.attractionType,
+      {Key key, this.iconPath, this.needDevider})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double itemHeight = MediaQuery.of(context).size.height * 0.09;
+    double itemHeight = MediaQuery.of(context).size.height * 0.05;
 
     AttractionListBloc listBloc = Provider.of<AttractionListBloc>(context);
 
     return Row(
       children: <Widget>[
         IconButton(
-          onPressed: () => listBloc.setAttractionsByType(attractionType), // change Attractions
-          icon: Image.asset(iconPath,
-              height: itemHeight,
-              width: MediaQuery.of(context).size.width * 0.19),
-        ),
+            iconSize: 55,
+            onPressed: () => listBloc.setAttractionsByType(attractionType),
+            // change Attractions
+            icon: Image.asset(iconPath,
+                height: itemHeight,
+                width: MediaQuery.of(context).size.width * 0.19,
+                fit: BoxFit.fitWidth)),
         if (this.needDevider)
           Container(
             height: itemHeight * 0.8,

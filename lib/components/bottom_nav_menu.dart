@@ -19,19 +19,28 @@ class BottomNavigationMenu extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Container(
-            height: 1.0,
-            width: MediaQuery.of(context).size.width * 0.9,
-            color: Colors.black,
-            margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 2),
-          ),
-          Row(
+          Stack(
             children: <Widget>[
-              BottomMenuItem(AttractionType.Museum,iconPath: allDestinations[0], needDevider: true),
-              BottomMenuItem(AttractionType.Theatre, iconPath: allDestinations[1], needDevider: true),
-              BottomMenuItem(AttractionType.Memorial, iconPath: allDestinations[2], needDevider: true),
-              BottomMenuItem(AttractionType.Stadium, iconPath: allDestinations[3], needDevider: true),
-              BottomMenuItem(AttractionType.Park, iconPath: allDestinations[4], needDevider: false),
+              Container(
+                height: 1.0,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.black,
+                margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 2),
+              ),
+              Row(
+                children: <Widget>[
+                  BottomMenuItem(AttractionType.Museum,
+                      iconPath: allDestinations[0], needDevider: true),
+                  BottomMenuItem(AttractionType.Theatre,
+                      iconPath: allDestinations[1], needDevider: true),
+                  BottomMenuItem(AttractionType.Memorial,
+                      iconPath: allDestinations[2], needDevider: true),
+                  BottomMenuItem(AttractionType.Stadium,
+                      iconPath: allDestinations[3], needDevider: true),
+                  BottomMenuItem(AttractionType.Park,
+                      iconPath: allDestinations[4], needDevider: false),
+                ]
+              )
             ],
           )
         ],

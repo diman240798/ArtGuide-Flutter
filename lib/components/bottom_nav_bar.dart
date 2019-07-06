@@ -39,6 +39,7 @@ class BottomNavBarState extends State<BottomNavBar> with TickerProviderStateMixi
   void initState() {
     super.initState();
     _hide = AnimationController(vsync: this, duration: kThemeAnimationDuration);
+    _hide.forward();
   }
 
   bool handleScrollNotification(ScrollNotification notification) {
