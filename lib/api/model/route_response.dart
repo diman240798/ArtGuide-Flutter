@@ -4,9 +4,9 @@ class RouteApiReponse {
   RouteApiReponse({this.routes}) {}
 
   factory RouteApiReponse.fromJson(Map<String, dynamic> json) {
-    var routesJson = json['routes'].cast<RouteApiModel>();
+    List<Map<String, dynamic>> routesJson = List<Map<String, dynamic>>.from(json['routes']);
     return RouteApiReponse(
-        routes: routesJson.map((routeJson) => RouteApiModel.fromJson(routeJson))
+        routes: routesJson.map<RouteApiModel>((routeJson) => RouteApiModel.fromJson(routeJson)).toList()
     );
   }
 }
@@ -17,9 +17,9 @@ class RouteApiModel {
   RouteApiModel({this.legs}) {}
 
   factory RouteApiModel.fromJson(Map<String, dynamic> json) {
-    var legsJson = json['legs'].cast<LegApiModel>();
+    var legsJson = json['legs'];
     return RouteApiModel(
-        legs: legsJson.map((legJson) => LegApiModel.fromJson(legJson))
+        legs: legsJson.map<LegApiModel>((legJson) => LegApiModel.fromJson(legJson)).toList()
     );
   }
 }
@@ -31,10 +31,10 @@ class LegApiModel {
   LegApiModel({this.summary, this.points}) {}
 
   factory LegApiModel.fromJson(Map<String, dynamic> json) {
-    var pointsJson = json['points'].cast<PointApiModel>();
+    var pointsJson = json['points'];
     return LegApiModel(
         summary: SummaryApiModel.fromJson(json['summary']),
-        points: pointsJson.map((pointJson) => PointApiModel.fromJson(pointJson))
+        points: pointsJson.map<PointApiModel>((pointJson) => PointApiModel.fromJson(pointJson)).toList()
     );
   }
 }
