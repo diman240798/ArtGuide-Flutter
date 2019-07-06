@@ -1,13 +1,18 @@
+import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
 
 class WikiListBuilder {
-  static List buildTextViews(List attractions, BuildContext context) {
-    var longText =
-        'Description Description Description Description Description Description Description Description Description Description Description DescriptionDescription';
+  static List buildTextViews(List<Place> attractions, BuildContext context) {
 
-    List<Widget> strings = List();
+    List<Widget> result = List<Widget>();
+
     attractions.forEach((attraction) {
+      String imagePath = attraction.imageSmall;
+      String description = attraction.description;
+      String title = attraction.title;
+      int id = attraction.id;
+
     var card = Container(
         margin: EdgeInsets.only(bottom: 20, right: 20),
         height: 150,
@@ -27,7 +32,7 @@ class WikiListBuilder {
               children: <Widget>[
                 // ICON
                 Image.asset(
-                  'images/memorial_kirovu_small.jpg',
+                  imagePath,
                   width: MediaQuery.of(context).size.width * 0.3,
                   fit: BoxFit.fill,
                 ),
@@ -44,7 +49,7 @@ class WikiListBuilder {
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            'Title Title Title Title Title Title Title Title Title Title Title Title Title',
+                            title,
                             maxLines: 2,
                             style: Theme.of(context).textTheme.body2,
                           ),
@@ -55,7 +60,7 @@ class WikiListBuilder {
                     SizedBox(
                         height: 30.0,
                         width: 220.0,
-                        child: Text(longText,
+                        child: Text(description,
                             maxLines: 2,
                             style: Theme.of(context).textTheme.body1)),
                     Container(
@@ -97,8 +102,8 @@ class WikiListBuilder {
           ),
         ),
       );
-      strings.add(card);
+      result.add(card);
     });
-    return strings;
+    return result;
   }
 }

@@ -2,56 +2,65 @@ import 'dart:io';
 
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/util/place_util.dart';
+import 'package:art_guide_flutter/wiki_attr_list/attractionsWiki.dart';
+import 'package:synchronized/synchronized.dart';
+
+import 'file_getter.dart';
 
 class CsvReader {
-  List<Place> data;
+  static List<Place> data = List();
 
-  List<Place> getData() {
-    if (data == null) {
-      data = readData();
+  static List<Place> getData(AttractionListBloc list) {
+    if (data.isEmpty) {
+      var lock = new Lock();
+      lock.synchronized(() async {
+        data = await readData();
+        list.setAttractions(data);
+      });
     }
     return data;
   }
 
-  static List<Place> readData() {
-    List<Place> result = [];
+  static Future<List<Place>> readData() async {
 
     String commentariy = "#";
     String separator = ",";
 
-    File('raw/data.csv').readAsString().then((data) {
-      List<String> lines = data.split('\n');
-      lines.map((line) {
-        if (line.startsWith(commentariy)) return;
+    String data = await FutterFileGetter.getDataFile();
 
-        List<String> splitDescription = line.split("::");
+    List<String> lines = data.split('\n');
 
-        List<String> tokens = splitDescription[0].split(separator);
-        String description = splitDescription[1];
 
-        // Read the data and store it.
-        String id_s = tokens[0];
-        int id = int.parse(id_s);
-        String title = tokens[1];
-        String latitude = tokens[2];
-        String longitude = tokens[3];
-        String imageSmall = tokens[4];
-        String imageBig = tokens[5];
+    return lines.map((line) {
+      if (line.startsWith(commentariy)) return null;
 
-        Place place = Place(
-            id,
-            title,
-            double.parse(latitude),
-            double.parse(longitude),
-            'images/$imageSmall.png',
-            'images/$imageBig.png',
-            description,
-            PlaceUtil.getTypeByPlaceId(id));
-        result.add(place);
-      });
-    });
+      List<String> splitDescription = line.split("::");
 
-    return result;
+      List<String> tokens = splitDescription[0].split(separator);
+      String description = splitDescription[1];
+
+      // Read the data and store it.
+      String id_s = tokens[0];
+      int id = int.parse(id_s);
+      String title = tokens[1];
+      String latitude = tokens[2];
+      String longitude = tokens[3];
+      String imageSmall = tokens[4];
+      String imageBig = tokens[5];
+
+      Place place = Place(
+          id,
+          title,
+          double.parse(latitude),
+          double.parse(longitude),
+          'images/$imageSmall.png',
+          'images/$imageBig.png',
+          description,
+          PlaceUtil.getTypeByPlaceId(id));
+
+      return place;
+    }).where((place) => place != null).toList(growable: false);
+
   }
 
   Place getPlaceById(int placeId) {

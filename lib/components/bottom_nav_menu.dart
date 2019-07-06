@@ -1,3 +1,4 @@
+import 'package:art_guide_flutter/model/attraction_type.dart';
 import 'package:flutter/material.dart';
 
 import 'bottom_nav_item.dart';
@@ -26,11 +27,11 @@ class BottomNavigationMenu extends StatelessWidget {
           ),
           Row(
             children: <Widget>[
-              BottomMenuItem(iconPath: allDestinations[0], needDevider: true),
-              BottomMenuItem(iconPath: allDestinations[1], needDevider: true),
-              BottomMenuItem(iconPath: allDestinations[2], needDevider: true),
-              BottomMenuItem(iconPath: allDestinations[3], needDevider: true),
-              BottomMenuItem(iconPath: allDestinations[4], needDevider: false),
+              BottomMenuItem(AttractionType.Museum,iconPath: allDestinations[0], needDevider: true),
+              BottomMenuItem(AttractionType.Theatre, iconPath: allDestinations[1], needDevider: true),
+              BottomMenuItem(AttractionType.Memorial, iconPath: allDestinations[2], needDevider: true),
+              BottomMenuItem(AttractionType.Stadium, iconPath: allDestinations[3], needDevider: true),
+              BottomMenuItem(AttractionType.Park, iconPath: allDestinations[4], needDevider: false),
             ],
           )
         ],

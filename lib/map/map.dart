@@ -49,42 +49,7 @@ class _HomePageState extends State<HomePage> {
         width: 30,
         point: points[pointIndex],
         builder: markerBuilder,
-      ),
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: LatLng(53.3498, -6.2603),
-        builder: markerBuilder,
-      ),
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: LatLng(53.3488, -6.2613),
-        builder: markerBuilder,
-      ),
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: LatLng(53.3488, -6.2613),
-        builder: markerBuilder,
-      ),
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: LatLng(48.8566, 2.3522),
-        builder: markerBuilder,
-      ),
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: LatLng(49.8566, 3.3522),
-        builder: markerBuilder,
-      ),
+      )
     ];
 
     super.initState();
