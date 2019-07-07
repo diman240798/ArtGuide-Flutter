@@ -1,6 +1,6 @@
+import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:art_guide_flutter/ui/colors.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -11,12 +11,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
+      statusBarColor:
+          AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
     return new Scaffold(
       body: new Stack(children: <Widget>[
-        new Image.asset(
+        Image.asset(
           'images/main_map_graphic.png',
           fit: BoxFit.cover,
           height: double.infinity,
@@ -25,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         Container(
             margin: EdgeInsets.only(top: 120),
-            child: new Align(
+            child: Align(
               alignment: Alignment.center,
               child: new Column(
                 children: <Widget>[
@@ -38,20 +39,21 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
             )),
-        new Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 30,
+        Positioned(
+            child: Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: SizedBox(
             width: 120,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/main_wiki_button.png'),
-              ),
-            ),
-            child: new FlatButton(
-                padding: EdgeInsets.all(0.0), onPressed: () => {}, child: null),
+            height: 50,
+            child: IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                padding: EdgeInsets.only(top: 20.0),
+                iconSize: 20,
+                icon: Image.asset('images/main_wiki_button.png'),
+                onPressed: () {}),
           ),
-        ),
+        )),
       ]),
     );
   }
