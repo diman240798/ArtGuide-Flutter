@@ -55,8 +55,8 @@ class CsvReader {
           title,
           double.parse(latitude),
           double.parse(longitude),
-          'images/$imageSmall.png',
-          'images/$imageBig.png',
+          'images/$imageSmall.jpg',
+          'images/$imageBig.jpg',
           description,
           PlaceUtil.getTypeByPlaceId(id));
 
