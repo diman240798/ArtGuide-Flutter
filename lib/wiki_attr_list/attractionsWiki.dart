@@ -88,12 +88,16 @@ class AttractionListBloc with ChangeNotifier {
   List attractions;
   PlaceRepository repo;
 
+  AttractionType currentType;
+
   AttractionListBloc() {
     repo = PlaceRepository(this);
+    currentType = AttractionType.Museum;
     attractions = repo.getPlacesByType(AttractionType.Museum);
   }
 
   void setAttractionsByType(AttractionType type) {
+    currentType = type;
     this.attractions = repo.getPlacesByType(type);
     notifyListeners();
   }

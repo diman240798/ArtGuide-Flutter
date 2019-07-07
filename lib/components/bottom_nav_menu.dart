@@ -1,15 +1,9 @@
 import 'package:art_guide_flutter/model/attraction_type.dart';
 import 'package:flutter/material.dart';
 
+import 'bottom_images_list.dart';
 import 'bottom_nav_item.dart';
 
-const List<String> allDestinations = <String>[
-  'images/item_museum.png',
-  'images/item_theatre.png',
-  'images/item_memorial.png',
-  'images/item_stadium.png',
-  'images/item_park.png'
-];
 
 class BottomNavigationMenu extends StatelessWidget {
   @override
@@ -27,20 +21,18 @@ class BottomNavigationMenu extends StatelessWidget {
                 color: Colors.black,
                 margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 2),
               ),
-              Row(
-                children: <Widget>[
-                  BottomMenuItem(AttractionType.Museum,
-                      iconPath: allDestinations[0], needDevider: true),
-                  BottomMenuItem(AttractionType.Theatre,
-                      iconPath: allDestinations[1], needDevider: true),
-                  BottomMenuItem(AttractionType.Memorial,
-                      iconPath: allDestinations[2], needDevider: true),
-                  BottomMenuItem(AttractionType.Stadium,
-                      iconPath: allDestinations[3], needDevider: true),
-                  BottomMenuItem(AttractionType.Park,
-                      iconPath: allDestinations[4], needDevider: false),
-                ]
-              )
+              Row(children: <Widget>[
+                BottomMenuItem(AttractionType.Museum,
+                    bottomMenuItemImage: BottomMenuImages.images[0], needDevider: true),
+                BottomMenuItem(AttractionType.Theatre,
+                    bottomMenuItemImage: BottomMenuImages.images[1], needDevider: true),
+                BottomMenuItem(AttractionType.Memorial,
+                    bottomMenuItemImage: BottomMenuImages.images[2], needDevider: true),
+                BottomMenuItem(AttractionType.Stadium,
+                    bottomMenuItemImage: BottomMenuImages.images[3], needDevider: true),
+                BottomMenuItem(AttractionType.Park,
+                    bottomMenuItemImage: BottomMenuImages.images[4], needDevider: false),
+              ])
             ],
           )
         ],
