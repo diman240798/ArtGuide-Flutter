@@ -1,57 +1,28 @@
+import 'package:art_guide_flutter/bloc/attractions_list_bloc.dart';
+import 'package:art_guide_flutter/components/bottom_nav_bar.dart';
+import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'marker_util.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MapPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
-  }
+  MapPageState createState() => MapPageState();
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<Marker> markers;
+class MapPageState extends State<MapPage> {
   int pointIndex;
-  List<LatLng> points = [
+  /*List<LatLng> points = [
     LatLng(51.5, -0.09),
     LatLng(49.8566, 3.3522),
-  ];
+  ];*/
 
   @override
   void initState() {
-    pointIndex = 0;
-    var markerBuilder = (ctx) => Container(
-      child: IconButton(
-          icon: Image.asset('images/map_marker_memorial.png'),
-          onPressed: () => Scaffold.of(ctx).showSnackBar(
-              new SnackBar(
-                  content: new Text("Sending Message"), duration: Duration(seconds: 1),))),
-    );
-    markers = [
-      Marker(
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        height: 30,
-        width: 30,
-        point: points[pointIndex],
-        builder: markerBuilder,
-      )
-    ];
-
     super.initState();
   }
 
@@ -59,34 +30,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var mapController = MapController();
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.refresh),
-        onPressed: () {
-          pointIndex++;
-          if (pointIndex >= points.length) {
-            pointIndex = 0;
-          }
-          setState(() {
-            markers[0] = Marker(
-              point: points[pointIndex],
-              anchorPos: AnchorPos.align(AnchorAlign.center),
-              height: 30,
-              width: 30,
-              builder: (ctx) => Icon(Icons.pin_drop),
-            );
+    AttractionListBloc listBloc = Provider.of<AttractionListBloc>(context);
 
-            // one of this
-            markers = List.from(markers);
-            // markers = [...markers];
-            // markers = []..addAll(markers);
-          });
-        },
-      ),
+    BottomNavBar bottomNavBar = BottomNavBar();
+
+    return Scaffold(
       body: FlutterMap(
         mapController: mapController,
         options: new MapOptions(
-          center: points[0],
+          center: LatLng(47.219196, 39.702261),
           zoom: 5,
           plugins: [
             MarkerClusterPlugin(),
@@ -99,10 +51,7 @@ class _HomePageState extends State<HomePage> {
           ),
           PolylineLayerOptions(
             polylines: [
-              Polyline(
-                  points: points,
-                  strokeWidth: 4.0,
-                  color: Colors.purple),
+             /* Polyline(points: points, strokeWidth: 4.0, color: Colors.purple),*/
             ],
           ),
           MarkerClusterLayerOptions(
@@ -113,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             fitBoundsOptions: FitBoundsOptions(
               padding: EdgeInsets.all(50),
             ),
-            markers: markers,
+            markers: listBloc.attractions.map(makeMarker).toList(),
             polygonOptions: PolygonOptions(
                 borderColor: Colors.blueAccent,
                 color: Colors.black12,
@@ -127,6 +76,55 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: bottomNavBar,
     );
   }
+
+  Marker makeMarker(Place place) {
+
+
+    var markerBuilder = (ctx) {
+      String iconPath = MarkerUtil.getMarkerIconPathById(place.id);
+
+      return Container(
+          child: IconButton(
+              icon: Image.asset(iconPath),
+              onPressed: () => Scaffold.of(ctx).showSnackBar(new SnackBar(
+                    content: new Text(place.title),
+                    duration: Duration(seconds: 1),
+                  ))),
+        );
+    };
+
+    double latitude = place.latitude;
+    double longitude = place.longitude;
+
+    return Marker(
+      anchorPos: AnchorPos.align(AnchorAlign.center),
+      height: 30,
+      width: 30,
+      point: LatLng(latitude, longitude),
+      builder: markerBuilder,
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ChangeNotifierProvider<AttractionListBloc>(
+        builder: (_) => AttractionListBloc(),
+        child: MapPage(),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MyApp());
 }

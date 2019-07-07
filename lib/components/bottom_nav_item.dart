@@ -1,6 +1,6 @@
+import 'package:art_guide_flutter/bloc/attractions_list_bloc.dart';
 import 'package:art_guide_flutter/model/attraction_type.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
-import 'package:art_guide_flutter/wiki_attr_list/attractionsWiki.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +36,7 @@ class BottomMenuItem extends StatelessWidget {
               splashColor: AppColors.colorGreen,
               onPressed: () => listBloc.setAttractionsByType(attractionType),
               // change Attractions
-              icon: Image.asset(iconPath,
-                  fit: BoxFit.fitWidth)),
+              icon: Image.asset(iconPath, fit: BoxFit.fitWidth)),
         ),
         if (this.needDevider)
           Container(
