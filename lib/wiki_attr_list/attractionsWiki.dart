@@ -10,16 +10,16 @@ import '../components/app_bar.dart';
 import '../components/bottom_nav_bar.dart';
 import '../ui/colors.dart';
 
-class ListPage extends StatefulWidget {
-  const ListPage({Key key}) : super(key: key);
+class WikiListPage extends StatefulWidget {
+  const WikiListPage({Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return ListPageSate();
+    return WikiListPageSate();
   }
 }
 
-class ListPageSate extends State<ListPage> {
+class WikiListPageSate extends State<WikiListPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider<AttractionListBloc>(
         builder: (_) => AttractionListBloc(),
-        child: ListPage(),
+        child: WikiListPage(),
       ),
     );
   }

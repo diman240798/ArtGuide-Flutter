@@ -7,7 +7,7 @@ void main() {
   runApp(new MaterialApp(
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
-      '/HomeScreen': (BuildContext context) => new MainScreen()
+      '/HomeScreen': (BuildContext context) => MainPage()
     },
   ));
 }

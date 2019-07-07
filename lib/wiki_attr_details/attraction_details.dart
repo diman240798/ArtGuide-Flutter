@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:provider/provider.dart';
 
-class AttractionDetailsPage extends StatelessWidget {
+class WikiDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -138,7 +138,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider<PlaceProvider>(
         builder: (_) => PlaceProvider(),
-        child: AttractionDetailsPage(),
+        child: WikiDetailsPage(),
       ),
     );
   }
