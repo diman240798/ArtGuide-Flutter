@@ -13,15 +13,15 @@ class BottomMenuImages {
         chosenPath: 'images/item_museum_chosen.png'),
     BottomMenuItemImage(
         usualPath: 'images/item_theatre.png',
-        chosenPath: 'images/item_museum_chosen.png'),
+        chosenPath: 'images/item_theatre_chosen.png'),
     BottomMenuItemImage(
         usualPath: 'images/item_memorial.png',
-        chosenPath: 'images/item_museum_chosen.png'),
+        chosenPath: 'images/item_memorial_chosen.png'),
     BottomMenuItemImage(
         usualPath: 'images/item_stadium.png',
-        chosenPath: 'images/item_museum_chosen.png'),
+        chosenPath: 'images/item_stadium_chosen.png'),
     BottomMenuItemImage(
         usualPath: 'images/item_park.png',
-        chosenPath: 'images/item_museum_chosen.png')
+        chosenPath: 'images/item_park_chosen.png')
   ];
 }

@@ -1,4 +1,6 @@
+import 'package:art_guide_flutter/bloc/shared/wiki_details_current_bloc.dart';
 import 'package:art_guide_flutter/components/app_bar.dart';
+import 'package:art_guide_flutter/main/app_router.dart';
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,10 @@ class WikiDetailsPage extends StatelessWidget {
           AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
-    Place place = null;
+    WikiDetailsSharedBloc detailsBloc = Provider.of<WikiDetailsSharedBloc>(context);
+
+    Place place = detailsBloc.currentAttraction;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -36,36 +41,39 @@ class WikiDetailsPage extends StatelessWidget {
               ),
               child: SliverList(
                   delegate:
-                      SliverChildListDelegate(this.buildWidgets(context))))
+                      SliverChildListDelegate(this.buildWidgets(context, place))))
         ],
       ),
     );
   }
 
-  List<Widget> buildWidgets(BuildContext context) {
+  List<Widget> buildWidgets(BuildContext context, Place place) {
+    int id = place.id;
+    String description = place.description;
+    String title = place.title;
+    String imageBigPath  = place.imageBig;
+
     var list = List<Widget>();
 
-    var onWikiPressed = () {};
     var onListenClicked = () {};
 
     list.add(Column(
       children: <Widget>[
         Image.asset(
-          'images/museum_rail_train_big.png',
+          imageBigPath,
           width: MediaQuery.of(context).size.width * 0.95,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "Title",
+            title,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             textAlign: TextAlign.start,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-              "DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION DESCROPTION",
+          child: Text(description,
               style: TextStyle(fontSize: 15)),
         ),
         Align(
@@ -98,13 +106,15 @@ class WikiDetailsPage extends StatelessWidget {
                           ],
                         ),
                       )),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                               topRight: Radius.elliptical(30, 25),
                               topLeft: Radius.elliptical(30, 25))),
-                      onPressed: () => {onWikiPressed},
+                      onPressed: () => onWikiPressed(context),
                       color: AppColors.colorGreen,
                       child: Row(
                         // Replace with a Row for horizontal icon + text
@@ -126,8 +136,10 @@ class WikiDetailsPage extends StatelessWidget {
     ));
     return list;
   }
-}
 
+  void onWikiPressed(BuildContext context) => Navigator.of(context).popAndPushNamed(AppRouter.WIKI_LIST_PAGE);
+}
+/////////////////////////////////////// Run Alone
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -136,15 +148,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<PlaceProvider>(
-        builder: (_) => PlaceProvider(),
+      home: ChangeNotifierProvider<WikiDetailsSharedBloc>(
+        builder: (_) => WikiDetailsSharedBloc(),
         child: WikiDetailsPage(),
       ),
     );
   }
 }
-
-class PlaceProvider with ChangeNotifier {}
 
 void main() {
   runApp(MyApp());

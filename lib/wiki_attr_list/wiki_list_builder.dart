@@ -1,9 +1,12 @@
+import 'package:art_guide_flutter/bloc/shared/wiki_details_current_bloc.dart';
+import 'package:art_guide_flutter/main/app_router.dart';
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WikiListBuilder {
-  static List buildTextViews(List<Place> attractions, BuildContext context) {
+  static List buildWikiCard(List<Place> attractions, BuildContext context) {
 
     List<Widget> result = List<Widget>();
 
@@ -27,7 +30,7 @@ class WikiListBuilder {
             splashColor: AppColors.colorGreen,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(40), bottomRight: Radius.circular(40)),
-            onTap: () {},
+            onTap: () => onCardClicked(context, attraction),
             child: Row(
               children: <Widget>[
                 // ICON
@@ -105,5 +108,11 @@ class WikiListBuilder {
       result.add(card);
     });
     return result;
+  }
+
+  static onCardClicked(BuildContext context, Place attraction) {
+    WikiDetailsSharedBloc detailsBloc = Provider.of<WikiDetailsSharedBloc>(context);
+    detailsBloc.setCurrentAttraction(attraction);
+    Navigator.of(context).pushNamed(AppRouter.WIKI_DETAILS_PAGE);
   }
 }

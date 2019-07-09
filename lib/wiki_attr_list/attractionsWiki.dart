@@ -10,16 +10,28 @@ import '../components/app_bar.dart';
 import '../components/bottom_nav_bar.dart';
 import '../ui/colors.dart';
 
-class WikiListPage extends StatefulWidget {
-  const WikiListPage({Key key}) : super(key: key);
 
+class WikiListPage extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    return WikiListPageSate();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<AttractionListBloc>(
+      builder: (_) => AttractionListBloc(),
+      child: WikiListScreen(),
+    );
   }
 }
 
-class WikiListPageSate extends State<WikiListPage> {
+
+class WikiListScreen extends StatefulWidget {
+  const WikiListScreen({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return WikiListScreenSate();
+  }
+}
+
+class WikiListScreenSate extends State<WikiListScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -53,7 +65,7 @@ class WikiListPageSate extends State<WikiListPage> {
               ),
               child: SliverList(
                   delegate: SliverChildListDelegate(
-                      WikiListBuilder.buildTextViews(
+                      WikiListBuilder.buildWikiCard(
                           listBloc.attractions, context))))
         ]),
         bottomNavigationBar: bottomNavBar,
@@ -62,6 +74,7 @@ class WikiListPageSate extends State<WikiListPage> {
   }
 }
 
+/////////////////////////////////////////// Run Alone
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -72,7 +85,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider<AttractionListBloc>(
         builder: (_) => AttractionListBloc(),
-        child: WikiListPage(),
+        child: WikiListScreen(),
       ),
     );
   }

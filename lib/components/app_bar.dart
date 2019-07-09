@@ -7,7 +7,7 @@ class MyAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 100),
+        SizedBox(width: 50),
         Image.asset('images/small_sign.png', height: 35),
         SizedBox(width: 20),
         Text('Культурный гид', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
