@@ -6,6 +6,7 @@ import 'package:art_guide_flutter/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
+import 'package:gif_ani/gif_ani.dart';
 import 'package:provider/provider.dart';
 
 class WikiDetailsPage extends StatelessWidget {
@@ -13,10 +14,11 @@ class WikiDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor:
-          AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
+      AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
-    WikiDetailsSharedBloc detailsBloc = Provider.of<WikiDetailsSharedBloc>(context);
+    WikiDetailsSharedBloc detailsBloc =
+    Provider.of<WikiDetailsSharedBloc>(context);
 
     Place place = detailsBloc.currentAttraction;
 
@@ -40,28 +42,40 @@ class WikiDetailsPage extends StatelessWidget {
                 ),
               ),
               child: SliverList(
-                  delegate:
-                      SliverChildListDelegate(this.buildWidgets(context, place))))
+                  delegate: SliverChildListDelegate(
+                      this.buildWidgets(context, place))))
         ],
       ),
     );
   }
 
+  GifGuide gifGuide = GifGuide();
+
+  Map<bool, IconData> playIcons = {true: Icons.play_arrow, false: Icons.pause};
+
+  IconData get curPlayIcon {
+    bool isPlaying = gifGuide.state._animationCtrl.isAnimating;
+    return playIcons[isPlaying];
+  }
+
+
   List<Widget> buildWidgets(BuildContext context, Place place) {
     int id = place.id;
     String description = place.description;
     String title = place.title;
-    String imageBigPath  = place.imageBig;
+    String imageBigPath = place.imageBig;
 
     var list = List<Widget>();
 
-    var onListenClicked = () {};
 
     list.add(Column(
       children: <Widget>[
         Image.asset(
           imageBigPath,
-          width: MediaQuery.of(context).size.width * 0.95,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.95,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -73,8 +87,7 @@ class WikiDetailsPage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(description,
-              style: TextStyle(fontSize: 15)),
+          child: Text(description, style: TextStyle(fontSize: 15)),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -82,14 +95,13 @@ class WikiDetailsPage extends StatelessWidget {
             children: <Widget>[
               Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: Image.asset('images/gif_speaking_hero.gif',
-                      width: MediaQuery.of(context).size.width * 0.3)),
+                  child: gifGuide),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   FlatButton(
                       shape: StadiumBorder(),
-                      onPressed: () => {onListenClicked},
+                      onPressed: onListenClicked,
                       color: AppColors.colorGreen,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 2.0, right: 8.0),
@@ -111,9 +123,8 @@ class WikiDetailsPage extends StatelessWidget {
                   ),
                   FlatButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.elliptical(30, 25),
-                              topLeft: Radius.elliptical(30, 25))),
+                          borderRadius:
+                          BorderRadius.all(Radius.elliptical(30, 25))),
                       onPressed: () => onWikiPressed(context),
                       color: AppColors.colorGreen,
                       child: Row(
@@ -122,7 +133,7 @@ class WikiDetailsPage extends StatelessWidget {
                           Icon(Icons.arrow_back, color: Colors.white, size: 20),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Text("WIKI",
+                            child: Text("      WIKI      ",
                                 style: TextStyle(color: Colors.white)),
                           )
                         ],
@@ -137,8 +148,57 @@ class WikiDetailsPage extends StatelessWidget {
     return list;
   }
 
-  void onWikiPressed(BuildContext context) => Navigator.of(context).popAndPushNamed(AppRouter.WIKI_LIST_PAGE);
+  void onWikiPressed(BuildContext context) =>
+      Navigator.of(context).popAndPushNamed(AppRouter.WIKI_LIST_PAGE);
+
+  void onListenClicked() {
+    bool isAnimating = gifGuide.state._animationCtrl.isAnimating;
+    if (isAnimating) {
+      gifGuide.state._animationCtrl.stop(canceled: true);
+    } else {
+      gifGuide.state._animationCtrl.repeat();
+    }
+  }
 }
+
+class GifGuide extends StatefulWidget {
+  GifGuideState state;
+
+  @override
+  State<StatefulWidget> createState() {
+    state = GifGuideState();
+    return state;
+  }
+}
+
+class GifGuideState extends State<GifGuide>
+    with SingleTickerProviderStateMixin {
+
+  GifController _animationCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationCtrl = new GifController(
+        vsync: this,
+        duration: Duration(milliseconds: 1500),
+        frameCount: 64);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GifAnimation(
+      gaplessPlayback: true,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.5,
+      image: new AssetImage('images/gif_speaking_hero.gif'),
+      controller: _animationCtrl,
+    );
+  }
+}
+
 /////////////////////////////////////// Run Alone
 class MyApp extends StatelessWidget {
   @override

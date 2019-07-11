@@ -25,6 +25,7 @@ dependencies:
   synchronized: 2.1.0+1
   path_provider: ^0.5.0+1
   location: ^2.3.5
+  gif_ani: ^0.0.2
 
   flutter:
     sdk: flutter
