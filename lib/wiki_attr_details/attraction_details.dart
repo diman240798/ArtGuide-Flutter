@@ -4,6 +4,7 @@ import 'package:art_guide_flutter/components/gif_guide.dart';
 import 'package:art_guide_flutter/main/app_router.dart';
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
+import 'package:art_guide_flutter/wiki_attr_details/tts_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_group_sliver/flutter_group_sliver.dart';
@@ -15,33 +16,36 @@ class WikiDetailsPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     return WikiDetailsState();
   }
-
 }
 
 class WikiDetailsState extends State<WikiDetailsPage> {
 
-  bool isPlaying = false;
+  static final Map<bool, IconData> playIcons = {false: Icons.play_arrow, true: Icons.pause};
 
+  bool isPlaying = false;
+  TtsHelper ttsHelper;
   GifGuide gifGuide = GifGuide();
 
-
-  IconData get curPlayIcon {
-    bool isPlaying = gifGuide.state.animationCtrl.isAnimating;
-    return playIcons[isPlaying];
+  @override
+  void initState() {
+    super.initState();
+    ttsHelper = TtsHelper(() {
+      setState(() {
+        isPlaying = false;
+        gifGuide.state.animationCtrl.stop();
+      });
+    });
   }
-
-  Map<bool, IconData> playIcons = {false: Icons.play_arrow, true: Icons.pause};
-
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor:
-      AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
+          AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
     ));
 
     WikiDetailsSharedBloc detailsBloc =
-    Provider.of<WikiDetailsSharedBloc>(context);
+        Provider.of<WikiDetailsSharedBloc>(context);
 
     Place place = detailsBloc.currentAttraction;
 
@@ -72,8 +76,6 @@ class WikiDetailsState extends State<WikiDetailsPage> {
     );
   }
 
-
-
   List<Widget> buildWidgets(BuildContext context, Place place) {
     int id = place.id;
     String description = place.description;
@@ -82,15 +84,11 @@ class WikiDetailsState extends State<WikiDetailsPage> {
 
     var list = List<Widget>();
 
-
     list.add(Column(
       children: <Widget>[
         Image.asset(
           imageBigPath,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.95,
+          width: MediaQuery.of(context).size.width * 0.95,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -116,7 +114,7 @@ class WikiDetailsState extends State<WikiDetailsPage> {
                 children: <Widget>[
                   FlatButton(
                       shape: StadiumBorder(),
-                      onPressed: onListenClicked,
+                      onPressed: () => onListenClicked(description),
                       color: AppColors.colorGreen,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 2.0, right: 8.0),
@@ -139,7 +137,7 @@ class WikiDetailsState extends State<WikiDetailsPage> {
                   FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius:
-                          BorderRadius.all(Radius.elliptical(30, 25))),
+                              BorderRadius.all(Radius.elliptical(30, 25))),
                       onPressed: () => onWikiPressed(context),
                       color: AppColors.colorGreen,
                       child: Row(
@@ -166,12 +164,14 @@ class WikiDetailsState extends State<WikiDetailsPage> {
   void onWikiPressed(BuildContext context) =>
       Navigator.of(context).popAndPushNamed(AppRouter.WIKI_LIST_PAGE);
 
-  void onListenClicked() {
+  void onListenClicked(String description) {
     bool isAnimating = gifGuide.state.animationCtrl.isAnimating;
     if (isAnimating) {
       gifGuide.state.animationCtrl.stop(canceled: true);
+      ttsHelper.stop();
     } else {
       gifGuide.state.animationCtrl.repeat();
+      ttsHelper.start(description);
     }
     setState(() {
       isPlaying = !isAnimating;
