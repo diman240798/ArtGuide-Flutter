@@ -1,5 +1,6 @@
 import 'package:art_guide_flutter/bloc/shared/wiki_details_current_bloc.dart';
 import 'package:art_guide_flutter/components/app_bar.dart';
+import 'package:art_guide_flutter/components/gif_guide.dart';
 import 'package:art_guide_flutter/main/app_router.dart';
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:art_guide_flutter/ui/colors.dart';
@@ -9,7 +10,29 @@ import 'package:flutter_group_sliver/flutter_group_sliver.dart';
 import 'package:gif_ani/gif_ani.dart';
 import 'package:provider/provider.dart';
 
-class WikiDetailsPage extends StatelessWidget {
+class WikiDetailsPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return WikiDetailsState();
+  }
+
+}
+
+class WikiDetailsState extends State<WikiDetailsPage> {
+
+  bool isPlaying = false;
+
+  GifGuide gifGuide = GifGuide();
+
+
+  IconData get curPlayIcon {
+    bool isPlaying = gifGuide.state.animationCtrl.isAnimating;
+    return playIcons[isPlaying];
+  }
+
+  Map<bool, IconData> playIcons = {false: Icons.play_arrow, true: Icons.pause};
+
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -49,14 +72,6 @@ class WikiDetailsPage extends StatelessWidget {
     );
   }
 
-  GifGuide gifGuide = GifGuide();
-
-  Map<bool, IconData> playIcons = {true: Icons.play_arrow, false: Icons.pause};
-
-  IconData get curPlayIcon {
-    bool isPlaying = gifGuide.state._animationCtrl.isAnimating;
-    return playIcons[isPlaying];
-  }
 
 
   List<Widget> buildWidgets(BuildContext context, Place place) {
@@ -110,7 +125,7 @@ class WikiDetailsPage extends StatelessWidget {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(4.0),
-                              child: Icon(Icons.play_arrow,
+                              child: Icon(playIcons[isPlaying],
                                   color: Colors.white, size: 20),
                             ),
                             Text("Послушать",
@@ -152,50 +167,15 @@ class WikiDetailsPage extends StatelessWidget {
       Navigator.of(context).popAndPushNamed(AppRouter.WIKI_LIST_PAGE);
 
   void onListenClicked() {
-    bool isAnimating = gifGuide.state._animationCtrl.isAnimating;
+    bool isAnimating = gifGuide.state.animationCtrl.isAnimating;
     if (isAnimating) {
-      gifGuide.state._animationCtrl.stop(canceled: true);
+      gifGuide.state.animationCtrl.stop(canceled: true);
     } else {
-      gifGuide.state._animationCtrl.repeat();
+      gifGuide.state.animationCtrl.repeat();
     }
-  }
-}
-
-class GifGuide extends StatefulWidget {
-  GifGuideState state;
-
-  @override
-  State<StatefulWidget> createState() {
-    state = GifGuideState();
-    return state;
-  }
-}
-
-class GifGuideState extends State<GifGuide>
-    with SingleTickerProviderStateMixin {
-
-  GifController _animationCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationCtrl = new GifController(
-        vsync: this,
-        duration: Duration(milliseconds: 1500),
-        frameCount: 64);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GifAnimation(
-      gaplessPlayback: true,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.5,
-      image: new AssetImage('images/gif_speaking_hero.gif'),
-      controller: _animationCtrl,
-    );
+    setState(() {
+      isPlaying = !isAnimating;
+    });
   }
 }
 
