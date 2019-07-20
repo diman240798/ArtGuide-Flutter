@@ -1,5 +1,8 @@
 import 'package:art_guide_flutter/bloc/attractions_list_bloc.dart';
+import 'package:art_guide_flutter/bloc/shared/map_state_bloc.dart';
+import 'package:art_guide_flutter/bloc/shared/wiki_details_current_bloc.dart';
 import 'package:art_guide_flutter/components/bottom_nav_bar.dart';
+import 'package:art_guide_flutter/components/path_bottom_info.dart';
 import 'package:art_guide_flutter/model/attraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -16,6 +19,7 @@ class MapPage extends StatefulWidget {
 
 class MapPageState extends State<MapPage> {
   int pointIndex;
+
   /*List<LatLng> points = [
     LatLng(51.5, -0.09),
     LatLng(49.8566, 3.3522),
@@ -31,8 +35,17 @@ class MapPageState extends State<MapPage> {
     var mapController = MapController();
 
     AttractionListBloc listBloc = Provider.of<AttractionListBloc>(context);
+    WikiDetailsSharedBloc placeBloc =
+        Provider.of<WikiDetailsSharedBloc>(context);
+    MapState mapState = Provider.of<MapStateBloc>(context).currentMapState;
 
     BottomNavBar bottomNavBar = BottomNavBar();
+    PathInfoBottomNavBar pathBar = new PathInfoBottomNavBar();
+
+    Widget bottomAppBar = (mapState == MapState.SEARCIHNG ||
+            mapState == MapState.SHOWING_PLACE_INFO)
+        ? bottomNavBar
+        : pathBar;
 
     return Scaffold(
       body: FlutterMap(
@@ -51,7 +64,7 @@ class MapPageState extends State<MapPage> {
           ),
           PolylineLayerOptions(
             polylines: [
-             /* Polyline(points: points, strokeWidth: 4.0, color: Colors.purple),*/
+              /* Polyline(points: points, strokeWidth: 4.0, color: Colors.purple),*/
             ],
           ),
           MarkerClusterLayerOptions(
@@ -76,24 +89,22 @@ class MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      bottomNavigationBar: bottomNavBar,
+      bottomNavigationBar: bottomAppBar,
     );
   }
 
   Marker makeMarker(Place place) {
-
-
     var markerBuilder = (ctx) {
       String iconPath = MarkerUtil.getMarkerIconPathById(place.id);
 
       return Container(
-          child: IconButton(
-              icon: Image.asset(iconPath),
-              onPressed: () => Scaffold.of(ctx).showSnackBar(new SnackBar(
-                    content: new Text(place.title),
-                    duration: Duration(seconds: 1),
-                  ))),
-        );
+        child: IconButton(
+            icon: Image.asset(iconPath),
+            onPressed: () => Scaffold.of(ctx).showSnackBar(new SnackBar(
+                  content: new Text(place.title),
+                  duration: Duration(seconds: 1),
+                ))),
+      );
     };
 
     double latitude = place.latitude;
@@ -117,10 +128,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<AttractionListBloc>(
-        builder: (_) => AttractionListBloc(),
-        child: MapPage(),
-      ),
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider<AttractionListBloc>(
+          builder: (_) => AttractionListBloc(),
+        ),
+        ChangeNotifierProvider<WikiDetailsSharedBloc>(
+          builder: (_) => WikiDetailsSharedBloc(),
+        ),
+        ChangeNotifierProvider<MapStateBloc>(
+          builder: (_) => MapStateBloc(),
+        )
+      ], child: MapPage()),
     );
   }
 }
