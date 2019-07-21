@@ -30,7 +30,7 @@ class PathInfoBottomNavBar extends StatelessWidget {
               width: screenWidth * 0.2,
               height: screenHeight * 0.2,
               fit: BoxFit.fill),
-          mapState == MapState.GETTING_FITST_ROUTE ? loadingRoute : routeInfo,
+          mapState == MapState.GETTING_FIRST_ROUTE ? loadingRoute : routeInfo,
           Container(
             width: screenWidth * 0.1,
             child: IconButton(

@@ -70,7 +70,9 @@ class WikiDetailsState extends State<WikiDetailsPage> {
               ),
               child: SliverList(
                   delegate: SliverChildListDelegate(
-                      this.buildWidgets(context, place))))
+                      this.buildWidgets(context, place))
+              )
+          )
         ],
       ),
     );
