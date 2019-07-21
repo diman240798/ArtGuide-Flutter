@@ -41,7 +41,15 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Container(
                 margin: EdgeInsets.only(top: 120),
-                child: new Image.asset('images/main_sign_image.png'),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset('images/main_sign_image.png'),
+                    Text(
+                      "Культурный гид",
+                      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
             )
           ],
         )

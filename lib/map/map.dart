@@ -16,12 +16,22 @@ import 'package:provider/provider.dart';
 
 import 'marker_util.dart';
 
-class MapPage extends StatefulWidget {
+class MapPage extends StatelessWidget {
   @override
-  MapPageState createState() => MapPageState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<AttractionListBloc>(
+      builder: (_) => AttractionListBloc(),
+      child: MapScreen(),
+    );
+  }
 }
 
-class MapPageState extends State<MapPage> {
+class MapScreen extends StatefulWidget {
+  @override
+  MapScreenState createState() => MapScreenState();
+}
+
+class MapScreenState extends State<MapScreen> {
   int pointIndex;
 
   /*List<LatLng> points = [
@@ -43,9 +53,9 @@ class MapPageState extends State<MapPage> {
 
     var mapController = MapController();
 
-    AttractionListBloc listBloc = Provider.of<AttractionListBloc>(ctx);
     WikiDetailsSharedBloc placeBloc = Provider.of<WikiDetailsSharedBloc>(ctx);
     MapStateBloc mapStateBloc = Provider.of<MapStateBloc>(ctx);
+    AttractionListBloc listBloc = Provider.of<AttractionListBloc>(ctx);
     MapState mapState = mapStateBloc.currentMapState;
 
     BottomNavBar bottomNavBar = BottomNavBar();
@@ -209,13 +219,15 @@ class MapPageState extends State<MapPage> {
                 child: FlatButton(
                   shape: StadiumBorder(),
                   color: AppColors.colorGreen,
-                  onPressed: () => Navigator.pushNamed(context, AppRouter.WIKI_DETAILS_PAGE),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRouter.WIKI_DETAILS_PAGE),
                   child:
                       Text('Подробнее', style: TextStyle(color: Colors.white)),
                 ),
               ),
               IconButton(
-                onPressed: () => mapStateBloc.setMapState(MapState.GETTING_FIRST_ROUTE),
+                onPressed: () =>
+                    mapStateBloc.setMapState(MapState.GETTING_FIRST_ROUTE),
                 icon: Container(
                   child: Image.asset('images/build_road_red.png'),
                 ),
@@ -247,7 +259,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<MapStateBloc>(
           builder: (_) => MapStateBloc(),
         )
-      ], child: MapPage()),
+      ], child: MapScreen()),
     );
   }
 }

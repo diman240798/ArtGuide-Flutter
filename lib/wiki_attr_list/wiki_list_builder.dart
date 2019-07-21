@@ -37,6 +37,7 @@ class WikiListBuilder {
                 Image.asset(
                   imagePath,
                   width: MediaQuery.of(context).size.width * 0.3,
+                  height: 150,
                   fit: BoxFit.fill,
                 ),
 
@@ -75,7 +76,7 @@ class WikiListBuilder {
                             child: FlatButton(
                               shape: StadiumBorder(),
                               color: AppColors.colorGreen,
-                              onPressed: () {},
+                              onPressed: () => onCardClicked(context, attraction),
                               child: Text('Show more',
                                   style: TextStyle(color: Colors.white)),
                             ),

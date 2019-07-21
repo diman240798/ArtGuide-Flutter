@@ -1,3 +1,4 @@
+import 'package:art_guide_flutter/bloc/shared/map_state_bloc.dart';
 import 'package:art_guide_flutter/bloc/shared/wiki_details_current_bloc.dart';
 import 'package:art_guide_flutter/map/map.dart';
 import 'package:art_guide_flutter/no_connection/no_connection.dart';
@@ -17,18 +18,24 @@ void main() => runApp(MaterialApp(home: MainPage()));
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<WikiDetailsSharedBloc>(
-      builder: (_) => WikiDetailsSharedBloc(),
-      child: MaterialApp(
-        home: MainScreen(),
-        routes: <String, WidgetBuilder> {
-          AppRouter.MAIN_PAGE: (ctx) => this,
-          AppRouter.MAP_PAGE: (ctx) => MapPage(),
-          AppRouter.WIKI_LIST_PAGE: (ctx) => WikiListPage(),
-          AppRouter.WIKI_DETAILS_PAGE: (ctx) => WikiDetailsPage(),
-          AppRouter.NO_CONNECTION_PAGE: (ctx) => NoConnectionPage(),
-        },
+    return MultiProvider(providers: [
+      ChangeNotifierProvider<WikiDetailsSharedBloc>(
+          builder: (_) => WikiDetailsSharedBloc(),
       ),
+      ChangeNotifierProvider<MapStateBloc>(
+        builder: (_) => MapStateBloc(),
+      )
+    ],
+        child: MaterialApp(
+          home: MainScreen(),
+          routes: <String, WidgetBuilder> {
+            AppRouter.MAIN_PAGE: (ctx) => this,
+            AppRouter.MAP_PAGE: (ctx) => MapPage(),
+            AppRouter.WIKI_LIST_PAGE: (ctx) => WikiListPage(),
+            AppRouter.WIKI_DETAILS_PAGE: (ctx) => WikiDetailsPage(),
+            AppRouter.NO_CONNECTION_PAGE: (ctx) => NoConnectionPage(),
+          },
+        )
     );
   }
 }
@@ -38,7 +45,7 @@ class MainScreen extends StatelessWidget {
   var location = new Location();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor:
       AppColors.colorGreenStatus, //or set color with: Color(0xFF0000FF)
@@ -72,7 +79,7 @@ class MainScreen extends StatelessWidget {
                       splashColor: Colors.transparent,
                       color: AppColors.colorGreen,
                       shape: StadiumBorder(),
-                      onPressed: onMapClicked,
+                      onPressed: () => onMapClicked(ctx),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -97,7 +104,7 @@ class MainScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: 20.0),
                     iconSize: 20,
                     icon: Image.asset('images/main_wiki_button.png'),
-                    onPressed: () => onWikiClicked(context)
+                    onPressed: () => onWikiClicked(ctx)
                 ),
               ),
             )),
@@ -105,10 +112,11 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Future onMapClicked() async {
+  Future onMapClicked(BuildContext ctx) async {
     try {
       var currentLocation = await location.getLocation();
       print(currentLocation.latitude.toString() + " " +currentLocation.longitude.toString());
+      Navigator.of(ctx).pushNamed(AppRouter.MAP_PAGE);
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
 
