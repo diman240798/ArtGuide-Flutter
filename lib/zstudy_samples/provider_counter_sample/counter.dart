@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Counter with ChangeNotifier {
+class CounterBloc with ChangeNotifier {
   int _counter;
 
-  Counter(this._counter);
+  CounterBloc(this._counter);
 
   getCounter() => _counter;
   setCounter(int counter) => _counter = counter;
